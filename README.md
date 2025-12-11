@@ -1,5 +1,10 @@
 # Trino C# Client
 
+[![Trino.Client](https://img.shields.io/badge/nuget-Trino.Client-blue?logo=nuget)](https://github.com/invent-github/trino-csharp-client/pkgs/nuget/Trino.Client)
+[![Trino.Data.ADO](https://img.shields.io/badge/nuget-Trino.Data.ADO-blue?logo=nuget)](https://github.com/invent-github/trino-csharp-client/pkgs/nuget/Trino.Data.ADO)
+[![Trino.Client.Auth](https://img.shields.io/badge/nuget-Trino.Client.Auth-blue?logo=nuget)](https://github.com/invent-github/trino-csharp-client/pkgs/nuget/Trino.Client.Auth)
+[![CI](https://github.com/invent-github/trino-csharp-client/actions/workflows/ci.yml/badge.svg)](https://github.com/invent-github/trino-csharp-client/actions/workflows/ci.yml)
+
 ## Introduction
 
 A streaming C# Trino client library with ADO.NET interfaces. The priorties for this library are:
@@ -34,6 +39,59 @@ These are the libraries that make up the client:
 > [!NOTE]
 > .NET standard 2.0 provides compatibility with .NET Framework 4.7.2 which is widely used.
 > Design note: IAsyncEnumerable is not available in .NET Standard 2.0 but due to asynchronous read-ahead you do not need to await reading every row.
+
+## Installation
+
+The packages are hosted on GitHub Packages. To use them, you need to configure NuGet to authenticate with GitHub Packages.
+
+### 1. Create a Personal Access Token (PAT)
+
+1. Go to GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
+2. Generate a new token with `read:packages` scope
+3. Copy the token
+
+### 2. Configure NuGet.config
+
+Create or update your `NuGet.config` file in your solution directory or user profile (`~/.nuget/NuGet/NuGet.config`):
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
+    <add key="github-invent" value="https://nuget.pkg.github.com/invent-github/index.json" />
+  </packageSources>
+  <packageSourceCredentials>
+    <github-invent>
+      <add key="Username" value="YOUR_GITHUB_USERNAME" />
+      <add key="ClearTextPassword" value="YOUR_PERSONAL_ACCESS_TOKEN" />
+    </github-invent>
+  </packageSourceCredentials>
+</configuration>
+```
+
+Replace `YOUR_GITHUB_USERNAME` with your GitHub username and `YOUR_PERSONAL_ACCESS_TOKEN` with the token you created.
+
+### 3. Install Packages
+
+Using .NET CLI:
+
+```bash
+dotnet add package Trino.Data.ADO
+dotnet add package Trino.Client.Auth
+```
+
+Or add to your `.csproj`:
+
+```xml
+<ItemGroup>
+  <PackageReference Include="Trino.Data.ADO" Version="*" />
+  <PackageReference Include="Trino.Client.Auth" Version="*" />
+</ItemGroup>
+```
+
+> [!TIP]
+> `Trino.Data.ADO` includes `Trino.Client` as a dependency, so you typically only need to reference `Trino.Data.ADO` and `Trino.Client.Auth`.
 
 ## Building
 
