@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "label": "Trino.Data.ADO",
+  "message": "v0.0.0",
+  "color": "blue",
+  "namedLogo": "nuget"
+}
