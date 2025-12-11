@@ -11,10 +11,14 @@ namespace Trino.Client.Test
     [TestClass]
     public class TestTypes
     {
+        private static string GetScriptPath(string filename)
+        {
+            return Path.Combine("scripts", filename);
+        }
         [TestMethod]
         public void TestTimestampConversion()
         {
-            using (TrinoTestServer server = TrinoTestServer.Create("trino_test_timestamp_conversion.txt"))
+            using (TrinoTestServer server = TrinoTestServer.Create(GetScriptPath("trino_test_timestamp_conversion.txt")))
             {
                 TrinoConnectionProperties properties = server.GetConnectionProperties();
                 properties.Catalog = "tpch";
@@ -47,7 +51,7 @@ namespace Trino.Client.Test
         [TestMethod]
         public void TestReadZeroRows()
         {
-            using (TrinoTestServer server = TrinoTestServer.Create("zero_rows.txt"))
+            using (TrinoTestServer server = TrinoTestServer.Create(GetScriptPath("zero_rows.txt")))
             {
                 TrinoConnectionProperties properties = server.GetConnectionProperties();
                 properties.Catalog = "tpch";
@@ -72,7 +76,7 @@ namespace Trino.Client.Test
         [TestMethod]
         public void TestCancellationGetSchema()
         {
-            using (TrinoTestServer server = TrinoTestServer.Create("trino_cancel.txt"))
+            using (TrinoTestServer server = TrinoTestServer.Create(GetScriptPath("trino_cancel.txt")))
             {
                 TrinoConnectionProperties properties = server.GetConnectionProperties();
                 properties.Catalog = "tpch";
@@ -106,7 +110,7 @@ namespace Trino.Client.Test
         [TestMethod]
         public void TestTimeout()
         {
-            using (TrinoTestServer server = TrinoTestServer.Create("trino_client_timeout.txt", TimeSpan.FromSeconds(5)))
+            using (TrinoTestServer server = TrinoTestServer.Create(GetScriptPath("trino_client_timeout.txt"), TimeSpan.FromSeconds(5)))
             {
                 try
                 {
@@ -148,7 +152,7 @@ namespace Trino.Client.Test
         [TestMethod]
         public void TestParameters()
         {
-            using (TrinoTestServer server = TrinoTestServer.Create("parameters.txt"))
+            using (TrinoTestServer server = TrinoTestServer.Create(GetScriptPath("parameters.txt")))
             {
                 TrinoConnectionProperties properties = server.GetConnectionProperties();
                 properties.Catalog = "delta";
@@ -193,7 +197,7 @@ namespace Trino.Client.Test
         [TestMethod]
         public void TrinoExceptionTest()
         {
-            using (TrinoTestServer server = TrinoTestServer.Create("trino_exception_test.txt"))
+            using (TrinoTestServer server = TrinoTestServer.Create(GetScriptPath("trino_exception_test.txt")))
             {
                 TrinoConnectionProperties properties = server.GetConnectionProperties();
                 properties.SessionProperties = new Dictionary<string, string>() { { "query_cache_enabled", "false" } };
@@ -230,7 +234,7 @@ namespace Trino.Client.Test
         [TestMethod]
         public void TestGetSchema()
         {
-            using (TrinoTestServer server = TrinoTestServer.Create("trino_schema_columns.txt"))
+            using (TrinoTestServer server = TrinoTestServer.Create(GetScriptPath("trino_schema_columns.txt")))
             {
                 TrinoConnectionProperties properties = server.GetConnectionProperties();
                 properties.Catalog = "delta";
@@ -269,7 +273,7 @@ namespace Trino.Client.Test
         [TestMethod]
         public void TrinoSessionTest()
         {
-            using (TrinoTestServer server = TrinoTestServer.Create("trino_session_test.txt"))
+            using (TrinoTestServer server = TrinoTestServer.Create(GetScriptPath("trino_session_test.txt")))
             {
                 TrinoConnectionProperties properties = server.GetConnectionProperties();
                 properties.Catalog = "tpch";
@@ -308,7 +312,7 @@ namespace Trino.Client.Test
         [TestMethod]
         public void TestAllTypes()
         {
-            using (TrinoTestServer server = TrinoTestServer.Create("trino_all_types.txt"))
+            using (TrinoTestServer server = TrinoTestServer.Create(GetScriptPath("trino_all_types.txt")))
             {
                 string all_types = $@"SELECT
                 CAST(NULL as varchar) AS null_varchar_column,
