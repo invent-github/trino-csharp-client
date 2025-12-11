@@ -197,7 +197,7 @@ namespace Trino.Client
                         cancellationToken).ConfigureAwait(false);
 
                     logger?.LogDebug("Trino: got response content: {0}", responseContent);
-                    this.Statement = JsonConvert.DeserializeObject<Statement>(responseContent);
+                    this.Statement = JsonConvert.DeserializeObject<Statement>(responseContent, DefaultJsonSerializerOptions.Instance);
                     logger?.LogInformation("Query created queryId at {1} msec: {0}", Statement?.id, stopwatch.ElapsedMilliseconds);
                     return this.Statement.stats;
                 }
@@ -299,7 +299,7 @@ namespace Trino.Client
 
             string responseStr = await this.GetAsync(new Uri(this.Statement.nextUri), OK).ConfigureAwait(false);
             logger?.LogDebug("Trino: response: {1}", responseStr);
-            QueryResultPage response = JsonConvert.DeserializeObject<QueryResultPage>(responseStr);
+            QueryResultPage response = JsonConvert.DeserializeObject<QueryResultPage>(responseStr, DefaultJsonSerializerOptions.Instance);
             logger?.LogDebug("Trino: response at {0} msec with state {1}", stopwatch.ElapsedMilliseconds, response.stats.state);
 
             // Note, the size is estimated based on the response string size which is not the actual deserialized size.
