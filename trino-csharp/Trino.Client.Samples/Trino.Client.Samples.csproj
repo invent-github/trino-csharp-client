@@ -6,7 +6,7 @@
     <Authors>Microsoft</Authors>
     <Product>Trino</Product>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <Version>$([System.DateTime]::Now.ToString("yyyy")).$([System.DateTime]::Now.ToString("MM")).$([System.DateTime]::Now.ToString("dd")).1</Version>
+    <Version>1.0.0</Version>
     <RootNamespace>$(MSBuildProjectName)</RootNamespace>
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <Description>Trino Client Samples</Description>

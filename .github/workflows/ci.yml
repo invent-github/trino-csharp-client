@@ -8,18 +8,36 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Set up dotnet
         uses: actions/setup-dotnet@v3
-      - name: Set up msbuild
-        uses: microsoft/setup-msbuild@v2
-      - name: Set up nuget
-        uses: nuget/setup-nuget@v2
         with:
-          nuget-version: '5.x'
-      - name: Nuget restore
-        run: nuget restore trino-csharp/TrinoDriver.sln
-      - name: Run msbuild
-        run: msbuild trino-csharp/TrinoDriver.sln   
+          dotnet-version: '8.0.x'
+      - name: Generate version
+        id: version
+        run: |
+          VERSION="$(date +%Y.%m.%d).${{ github.run_number }}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Generated version: $VERSION"
+      - name: Restore dependencies
+        run: dotnet restore trino-csharp/TrinoDriver.sln
+      - name: Build with version
+        run: dotnet build trino-csharp/TrinoDriver.sln --no-restore -p:Version=${{ steps.version.outputs.version }} -p:AssemblyVersion=${{ steps.version.outputs.version }} -p:FileVersion=${{ steps.version.outputs.version }}
+      - name: Test
+        run: dotnet test trino-csharp/TrinoDriver.sln --no-build --verbosity normal
+      - name: Pack
+        run: dotnet pack trino-csharp/TrinoDriver.sln --no-build --output ./packages -p:Version=${{ steps.version.outputs.version }}
+      - name: Upload packages as artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: nuget-packages
+          path: ./packages/*.nupkg
+      - name: Publish to GitHub Packages
+        if: github.ref == 'refs/heads/main'
+        run: |
+          dotnet nuget push ./packages/*.nupkg \
+            --source https://nuget.pkg.github.com/invent-github/index.json \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --skip-duplicate   
