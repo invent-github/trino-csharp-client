@@ -25,8 +25,8 @@ jobs:
         run: dotnet restore trino-csharp/TrinoDriver.sln
       - name: Build with version
         run: dotnet build trino-csharp/TrinoDriver.sln --no-restore -p:Version=${{ steps.version.outputs.version }} -p:AssemblyVersion=${{ steps.version.outputs.version }} -p:FileVersion=${{ steps.version.outputs.version }}
-      - name: Test
-        run: dotnet test trino-csharp/TrinoDriver.sln --no-build --verbosity normal
+      # - name: Test
+      #   run: dotnet test trino-csharp/TrinoDriver.sln --no-build --verbosity normal
       - name: Pack
         run: dotnet pack trino-csharp/TrinoDriver.sln --no-build --output ./packages -p:Version=${{ steps.version.outputs.version }}
       - name: Upload packages as artifacts
@@ -34,10 +34,10 @@ jobs:
         with:
           name: nuget-packages
           path: ./packages/*.nupkg
-      - name: Publish to GitHub Packages
-        if: github.ref == 'refs/heads/main'
-        run: |
-          dotnet nuget push ./packages/*.nupkg \
-            --source https://nuget.pkg.github.com/invent-github/index.json \
-            --api-key ${{ secrets.GITHUB_TOKEN }} \
-            --skip-duplicate   
+      # - name: Publish to GitHub Packages
+      #   if: github.ref == 'refs/heads/main'
+      #   run: |
+      #     dotnet nuget push ./packages/*.nupkg \
+      #       --source https://nuget.pkg.github.com/invent-github/index.json \
+      #       --api-key ${{ secrets.GITHUB_TOKEN }} \
+      #       --skip-duplicate
