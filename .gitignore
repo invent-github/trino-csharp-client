@@ -21,6 +21,9 @@ bld/
 *.sln.docstates
 *.userprefs
 
+# JetBrains IDEs (Rider, IntelliJ, etc.)
+.idea/
+
 # ReSharper
 _ReSharper*/
 *.[Rr]e[Ss]harper

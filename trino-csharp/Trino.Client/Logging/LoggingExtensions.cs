@@ -1,17 +1,42 @@
 using System;
+using System.Collections.Generic;
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Internal;
 
 namespace Trino.Client.Logging
 {
+    // Custom implementation to replace internal FormattedLogValues
+    internal class FormattedLogValues
+    {
+        private readonly string _format;
+        private readonly object[] _args;
+
+        public FormattedLogValues(string format, params object[] args)
+        {
+            _format = format;
+            _args = args ?? Array.Empty<object>();
+        }
+
+        public override string ToString()
+        {
+            try
+            {
+                return string.Format(_format, _args);
+            }
+            catch
+            {
+                return _format;
+            }
+        }
+    }
+
     // Wraps logger extensions to avoid direct dependency on Microsoft.Extensions.Logging
     public static class LoggerExtensions
     {
         private static readonly Func<object, Exception, string> _messageFormatter = new Func<object, Exception, string>(LoggerExtensions.MessageFormatter);
 
         /// <summary>Formats and writes a debug log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="eventId">The event id associated with the log.</param>
         /// <param name="exception">The exception to log.</param>
         /// <param name="message">Format string of the log message.</param>
@@ -29,7 +54,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes a debug log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="eventId">The event id associated with the log.</param>
         /// <param name="message">Format string of the log message.</param>
         /// <param name="args">An object array that contains zero or more objects to format.</param>
@@ -45,7 +70,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes a debug log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="message">Format string of the log message.</param>
         /// <param name="args">An object array that contains zero or more objects to format.</param>
         public static void LogDebug(this ILoggerWrapper logger, string message, params object[] args)
@@ -56,7 +81,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes a trace log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="eventId">The event id associated with the log.</param>
         /// <param name="exception">The exception to log.</param>
         /// <param name="message">Format string of the log message.</param>
@@ -74,7 +99,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes a trace log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="eventId">The event id associated with the log.</param>
         /// <param name="message">Format string of the log message.</param>
         /// <param name="args">An object array that contains zero or more objects to format.</param>
@@ -90,7 +115,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes a trace log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="message">Format string of the log message.</param>
         /// <param name="args">An object array that contains zero or more objects to format.</param>
         public static void LogTrace(this ILoggerWrapper logger, string message, params object[] args)
@@ -101,7 +126,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes an informational log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="eventId">The event id associated with the log.</param>
         /// <param name="exception">The exception to log.</param>
         /// <param name="message">Format string of the log message.</param>
@@ -119,7 +144,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes an informational log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="eventId">The event id associated with the log.</param>
         /// <param name="message">Format string of the log message.</param>
         /// <param name="args">An object array that contains zero or more objects to format.</param>
@@ -135,7 +160,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes an informational log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="message">Format string of the log message.</param>
         /// <param name="args">An object array that contains zero or more objects to format.</param>
         public static void LogInformation(this ILoggerWrapper logger, string message, params object[] args)
@@ -146,7 +171,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes a warning log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="eventId">The event id associated with the log.</param>
         /// <param name="exception">The exception to log.</param>
         /// <param name="message">Format string of the log message.</param>
@@ -164,7 +189,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes a warning log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="eventId">The event id associated with the log.</param>
         /// <param name="message">Format string of the log message.</param>
         /// <param name="args">An object array that contains zero or more objects to format.</param>
@@ -180,7 +205,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes a warning log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="message">Format string of the log message.</param>
         /// <param name="args">An object array that contains zero or more objects to format.</param>
         public static void LogWarning(this ILoggerWrapper logger, string message, params object[] args)
@@ -191,7 +216,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes an error log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="eventId">The event id associated with the log.</param>
         /// <param name="exception">The exception to log.</param>
         /// <param name="message">Format string of the log message.</param>
@@ -209,7 +234,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes an error log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="eventId">The event id associated with the log.</param>
         /// <param name="message">Format string of the log message.</param>
         /// <param name="args">An object array that contains zero or more objects to format.</param>
@@ -225,7 +250,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes an error log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="message">Format string of the log message.</param>
         /// <param name="args">An object array that contains zero or more objects to format.</param>
         public static void LogError(this ILoggerWrapper logger, string message, params object[] args)
@@ -236,7 +261,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes a critical log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="eventId">The event id associated with the log.</param>
         /// <param name="exception">The exception to log.</param>
         /// <param name="message">Format string of the log message.</param>
@@ -254,7 +279,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes a critical log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="eventId">The event id associated with the log.</param>
         /// <param name="message">Format string of the log message.</param>
         /// <param name="args">An object array that contains zero or more objects to format.</param>
@@ -270,7 +295,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats and writes a critical log message.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to write to.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to write to.</param>
         /// <param name="message">Format string of the log message.</param>
         /// <param name="args">An object array that contains zero or more objects to format.</param>
         public static void LogCritical(this ILoggerWrapper logger, string message, params object[] args)
@@ -281,7 +306,7 @@ namespace Trino.Client.Logging
         }
 
         /// <summary>Formats the message and creates a scope.</summary>
-        /// <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILoggerWrapper" /> to create the scope in.</param>
+        /// <param name="logger">The <see cref="T:ILoggerWrapper" /> to create the scope in.</param>
         /// <param name="messageFormat">Format string of the scope message.</param>
         /// <param name="args">An object array that contains zero or more objects to format.</param>
         /// <returns>A disposable scope object. Can be null.</returns>

@@ -1,5 +1,8 @@
+using System;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Trino.Data.ADO;
 using Trino.Data.ADO.Client;
 
@@ -36,21 +39,19 @@ namespace Trino.Client.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Add_NullParameter_ThrowsArgumentNullException()
         {
             var collection = CreateCollection();
 
-            collection.Add(null);
+            Assert.ThrowsExactly<ArgumentNullException>(() => collection.Add(null));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void Add_NonParameterObject_ThrowsArgumentException()
         {
             var collection = CreateCollection();
 
-            collection.Add("not a parameter");
+            Assert.ThrowsExactly<ArgumentException>(() => collection.Add("not a parameter"));
         }
 
         [TestMethod]

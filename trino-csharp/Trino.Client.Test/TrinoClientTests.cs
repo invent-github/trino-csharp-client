@@ -1,8 +1,14 @@
+using System;
+using System.Collections.Generic;
 using Trino.Client.Types;
 
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Trino.Data.ADO.Server;
 using Trino.Data.ADO.Client;
 
@@ -408,7 +414,7 @@ namespace Trino.Client.Test
                             Assert.AreEqual("big_decimal_column", tableWithSchema.Columns[8].ToString());
 
                             // Test big decimal extraction fails at this scale
-                            Assert.ThrowsException<OverflowException>(() => ((TrinoBigDecimal)idr.GetValue(8)).ToDecimal());
+                            Assert.ThrowsExactly<OverflowException>(() => ((TrinoBigDecimal)idr.GetValue(8)).ToDecimal());
 
                             Assert.AreEqual(typeof(Boolean), idr.GetValue(9).GetType());
                             Assert.AreEqual(true, idr.GetValue(9));
