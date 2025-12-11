@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       packages: write
     steps:
       - uses: actions/checkout@v4
@@ -44,18 +44,3 @@ jobs:
             --source https://nuget.pkg.github.com/invent-github/index.json \
             --api-key ${{ secrets.GITHUB_TOKEN }} \
             --skip-duplicate
-      - name: Update version badges
-        if: github.ref == 'refs/heads/main'
-        run: |
-          VERSION="v${{ steps.version.outputs.version }}"
-          echo '{"schemaVersion":1,"label":"Trino.Client","message":"'"$VERSION"'","color":"blue","namedLogo":"nuget"}' > .github/badges/trino-client.json
-          echo '{"schemaVersion":1,"label":"Trino.Data.ADO","message":"'"$VERSION"'","color":"blue","namedLogo":"nuget"}' > .github/badges/trino-data-ado.json
-          echo '{"schemaVersion":1,"label":"Trino.Client.Auth","message":"'"$VERSION"'","color":"blue","namedLogo":"nuget"}' > .github/badges/trino-client-auth.json
-      - name: Commit version badges
-        if: github.ref == 'refs/heads/main'
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add .github/badges/*.json
-          git diff --staged --quiet || git commit -m "ci: update version badges to ${{ steps.version.outputs.version }}"
-          git push

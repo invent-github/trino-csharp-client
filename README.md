@@ -1,9 +1,9 @@
 # Trino C# Client
 
 [![CI](https://github.com/invent-github/trino-csharp-client/actions/workflows/ci.yml/badge.svg)](https://github.com/invent-github/trino-csharp-client/actions/workflows/ci.yml)
-[![Trino.Client](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/invent-github/trino-csharp-client/main/.github/badges/trino-client.json&cacheSeconds=3600)](https://github.com/invent-github/trino-csharp-client/pkgs/nuget/Trino.Client)
-[![Trino.Data.ADO](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/invent-github/trino-csharp-client/main/.github/badges/trino-data-ado.json&cacheSeconds=3600)](https://github.com/invent-github/trino-csharp-client/pkgs/nuget/Trino.Data.ADO)
-[![Trino.Client.Auth](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/invent-github/trino-csharp-client/main/.github/badges/trino-client-auth.json&cacheSeconds=3600)](https://github.com/invent-github/trino-csharp-client/pkgs/nuget/Trino.Client.Auth)
+[![Trino.Client](https://img.shields.io/badge/nuget-Trino.Client-blue?logo=nuget)](https://github.com/invent-github/trino-csharp-client/pkgs/nuget/Trino.Client)
+[![Trino.Data.ADO](https://img.shields.io/badge/nuget-Trino.Data.ADO-blue?logo=nuget)](https://github.com/invent-github/trino-csharp-client/pkgs/nuget/Trino.Data.ADO)
+[![Trino.Client.Auth](https://img.shields.io/badge/nuget-Trino.Client.Auth-blue?logo=nuget)](https://github.com/invent-github/trino-csharp-client/pkgs/nuget/Trino.Client.Auth)
 
 ## Introduction
 
